@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "cors-anywhere": "^0.4.1",
+    "css-loader": "^0.28.11",
     "express": "^4.16.3",
     "pdf-annotate.js": "^1.0.0",
     "pdf.js": "^0.1.0",
@@ -10,8 +12,11 @@
     "react-dom": "^16.3.2",
     "react-pdf": "^3.0.5",
     "react-pdf-annotator": "^1.0.0",
+    "react-router-dom": "^4.3.1",
+    "sass-loader": "^7.0.3",
     "socket.io": "^2.1.1",
     "socket.io-client": "^2.1.1",
+    "style-loader": "^0.21.0",
     "url-search-params": "^0.10.0"
   },
   "devDependencies": {

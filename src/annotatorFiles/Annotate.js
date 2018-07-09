@@ -1,6 +1,8 @@
 // @flow
 
 import React, { Component } from "react";
+import socketIOClient from "socket.io-client";
+
 
 import URLSearchParams from "url-search-params";
 
@@ -20,7 +22,7 @@ import Sidebar from "./Sidebar";
 
 import type { T_Highlight, T_NewHighlight } from "./types";
 
-//import "./style/App.css";
+import "./style/App.css";
 
 type T_ManuscriptHighlight = T_Highlight;
 
@@ -29,6 +31,10 @@ type Props = {};
 type State = {
   highlights: Array<T_ManuscriptHighlight>
 };
+
+const ENDPOINT_ADDRESS = "localhost:8000"
+let socket;
+
 
 const getNextId = () => String(Math.random()).slice(2);
 
@@ -45,23 +51,62 @@ const HighlightPopup = ({ comment }) =>
     </div>
   ) : null;
 
-const DEFAULT_URL = "./canon.pdf";
+let DEFAULT_URL = "./canon.pdf";
 
 const searchParams = new URLSearchParams(window.location.search);
-const url = searchParams.get("url") || DEFAULT_URL;
+let url = searchParams.get("url") || DEFAULT_URL;
 
 class PDFComponent extends Component<Props, State> {
   state = {
-    highlights: testHighlights[url] ? [...testHighlights[url]] : []
+    highlights: testHighlights[url] ? [...testHighlights[url]] : [],
+    pdf: ''
   };
 
   state: State;
+  constructor(props) {
+    super(props);
+    url = this.props.pdf;
+    console.log(url);
+    console.log("Constructor PDFComponent");
+    socket = this.props.socket;
+    socket.emit("create", url);
+    const { highlights } = this.state;
+    socket.on('add highlight', (highlight) => {
+      console.log('adding highlight from server',highlight)
+      this.addHighlight(highlight);
+    })
+    socket.on('remove highlights', () => {
+      console.log("Remove Highlight from the server");
+      this.actualResetHighlights();
+    })
+    socket.on('syncup', highlights => {
+      console.log('got syncup message from server', highlights)
+      highlights.forEach(highlight => this.addHighlight(highlight))
+    })
+  }
 
   resetHighlights = () => {
+    this.actualResetHighlights();
+    socket.emit('remove highlights');
+  };
+
+  actualResetHighlights = () => {
     this.setState({
       highlights: []
     });
-  };
+  }
+  componentWillReceiveProps(nextProps) {
+    console.log("Updtate Every Time");
+    url = nextProps.pdf;
+    console.log(url)
+    this.setState({ 
+      pdf: nextProps.pdf
+    });  
+    socket.emit('pdf-url', this.state.pdf)
+    console.log(this.state.pdf);
+  }
+
+
 
   scrollViewerTo = (highlight: any) => {};
 
@@ -94,6 +139,16 @@ class PDFComponent extends Component<Props, State> {
 
     this.setState({
       highlights: [{ ...highlight, id: getNextId() }, ...highlights]
+    });  
+  }
+
+  send(highlight: T_NewHighlight) {
+    this.addHighlight(highlight);
+    console.log('send highlight to server', highlight)
+    let room = url;
+    socket.emit('add highlight', {
+      highlight: highlight,
+      room: room
     });
   }
 
@@ -115,7 +170,7 @@ class PDFComponent extends Component<Props, State> {
 
   render() {
     const { highlights } = this.state;
-
+    
     return (
       <div className="App" style={{ display: "flex", height: "100vh" }}>
         <Sidebar
@@ -151,7 +206,7 @@ class PDFComponent extends Component<Props, State> {
                   <Tip
                     onOpen={transformSelection}
                     onConfirm={comment => {
-                      this.addHighlight({ content, position, comment });
+                      this.send({ content, position, comment });
 
                       hideTipAndSelection();
                     }}

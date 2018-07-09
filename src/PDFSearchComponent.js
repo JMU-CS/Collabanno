@@ -1,8 +1,5 @@
 import React from 'react';
-import socketIOClient from "socket.io-client";
 
-const ENDPOINT_ADDRESS = "localhost:8000"
-const socket = socketIOClient(ENDPOINT_ADDRESS);
 
 export default class PDFSearchComponent extends React.Component {
     state = {
