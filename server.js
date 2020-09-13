@@ -34,10 +34,10 @@ io.on('connection', (client) => {
         }
         roomHighlights[data.room].push(data.highlight)
         //client.broadcast.to(data.room).emit('add highlight', data.highlight);
-        console.log("Sending highlight message to ",io.sockets.adapter.rooms[data.room].length, " room numbers")
+        //console.log("Sending highlight message to ",io.sockets.adapter.rooms[data.room].length, " room numbers")
         client.to(data.room).emit('add highlight', data.highlight)
     })
-    client.on('remove highlights', () => {
+    client.on('remove highlights', (data) => {
         client.to(data.room).emit('remove highlights')
     })
 

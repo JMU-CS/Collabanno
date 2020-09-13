@@ -87,7 +87,9 @@ class PDFComponent extends Component<Props, State> {
 
   resetHighlights = () => {
     this.actualResetHighlights();
-    socket.emit('remove highlights');
+    socket.emit('remove highlights', {
+      room: url
+    });
   };
 
   actualResetHighlights = () => {
