@@ -1,5 +1,5 @@
 import React from 'react';
-import Class from './Class';
+import Class from '../Class/Class';
 
 export default function ClassList({ classes }) {
     return (

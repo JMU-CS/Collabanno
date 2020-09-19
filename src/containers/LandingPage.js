@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
-import LoggedInTeacherDashboard from './LoggedInTeacher/LoggedInTeacherDashboard';
-import UserBar from '../user/UserBar';
+import styled from 'styled-components';
+import LoggedInTeacherDashboard from './LoggedInTeacherDashboard';
+import UserBar from '../components/UserBar/UserBar';
+
+const LandingPageWrapper = styled.div`
+    color: #000;
+`;
 
 export default function LandingPage() {
     const [user, setUser] = useState('');
 
     return (
-        <div>
+        <LandingPageWrapper>
             <h1>Collabanno</h1>
             <UserBar user={user} setUser={setUser} />
             <p>is an app that will enhance the experience of reading a document as a group.
@@ -19,6 +24,6 @@ export default function LandingPage() {
             {user && ( <LoggedInTeacherDashboard user={user} /> )}
             <p>Github: <a href="https://github.com/JMU-CS/Collabanno" target="_blank">CollabAnno</a></p>
 
-        </div>
+        </LandingPageWrapper>
     );
 }

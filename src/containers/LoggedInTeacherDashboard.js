@@ -1,6 +1,6 @@
 import React, {useState } from 'react';
-import ClassList from './ClassList';
-import PDFSearchComponent from '../../PDFSearchComponent';
+import ClassList from '../components/ClassList/ClassList';
+import PDFSearchComponent from '../components/PDFSearchComponent/PDFSearchComponent';
 
 
 const classList = [

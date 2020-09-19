@@ -2,9 +2,9 @@ import React from "react";
 import {
   BrowserRouter, Route, Link
 } from 'react-router-dom';
-import PDFSearchComponent from './components/PDFSearchComponent';
-import App from './components/App';
-import LandingPage from './components/dashboard/LandingPage';
+import PDFSearchComponent from './components/PDFSearchComponent/PDFSearchComponent';
+import App from './App';
+import LandingPage from './containers/LandingPage';
 
 
 

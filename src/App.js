@@ -1,5 +1,5 @@
 import React, { Component }from 'react';
-import PDFComponent from './annotatorFiles/Annotate';
+import PDFComponent from './components/annotatorFiles/Annotate';
 import socketIOClient from "socket.io-client";
 
 const ENDPOINT_ADDRESS = "localhost:8000"
